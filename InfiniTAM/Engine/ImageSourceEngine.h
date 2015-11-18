@@ -4,6 +4,10 @@
 
 #include "../ITMLib/ITMLib.h"
 
+#include <vector>
+#include <fstream>
+#include <sstream>
+
 namespace InfiniTAM
 {
 	namespace Engine
@@ -21,6 +25,8 @@ namespace InfiniTAM
 			virtual Vector2i getDepthImageSize(void) = 0;
 			virtual Vector2i getRGBImageSize(void) = 0;
 		};
+
+		
 
 		class ImageFileReader : public ImageSourceEngine
 		{
@@ -88,6 +94,31 @@ namespace InfiniTAM
 
 			Vector2i getDepthImageSize(void) { return imgSize; }
 			Vector2i getRGBImageSize(void) { return imgSize; }
+		};
+
+		class TUMFileReader : public ImageSourceEngine
+		{
+		private:
+			std::vector<ITMPose> poses;
+			std::vector<std::string> depthNames;
+			std::vector<std::string> rgbNames;
+
+			const char *associationFileLocation;
+
+			ITMUChar4Image *cached_rgb;
+			ITMShortImage *cached_depth;
+
+			void loadIntoCache();
+			int cachedFrameNo;
+			int currentFrameNo;
+		public:
+			TUMFileReader(const char *calibFilename, const char *associationFilename, const char *associationFileLocation);
+			~TUMFileReader();
+
+			bool hasMoreImages(void);
+			void getImages(ITMUChar4Image *rgb, ITMShortImage *rawDepth);
+			Vector2i getDepthImageSize(void);
+			Vector2i getRGBImageSize(void);
 		};
 	}
 }

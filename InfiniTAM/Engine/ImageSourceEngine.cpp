@@ -222,3 +222,119 @@ void RawFileReader::getImages(ITMUChar4Image *rgb, ITMShortImage *rawDepth)
 
 	++currentFrameNo;
 }
+
+TUMFileReader::TUMFileReader(const char *calibFilename, const char *associationFilename, const char *associationFileLocation)
+	: ImageSourceEngine(calibFilename), associationFileLocation(associationFileLocation)
+{
+	std::fstream associationFile;
+	float junkstamp;
+	std::string depthName;
+	std::string rgbName;
+	float qx, qy, qz, qw, tx, ty, tz;
+	associationFile.open(associationFilename, std::ios::in);
+	if (!associationFile.is_open()) {
+		std::cout << "Could not open association file.\n";
+	}
+	else {
+		while (!associationFile.eof()) {
+			std::string temp("");
+			getline(associationFile, temp);
+			std::stringstream stream(temp);
+			stream >> junkstamp; // throwaway timestamps
+
+			stream >> rgbName;
+
+			stream >> junkstamp;
+
+			stream >> tx; 
+			stream >> ty; 
+			stream >> tz; 
+			stream >> qx; stream >> qy; 
+			stream >> qz; stream >> qw; 
+
+			stream >> junkstamp;
+
+			stream >> depthName;
+
+			// todo store poses
+
+			depthNames.push_back(depthName);
+			rgbNames.push_back(rgbName);
+		}
+
+		std::cout << "Read " << depthNames.size() << " frames from association file: " << associationFilename << ".\n";
+	}
+
+	currentFrameNo = 0;
+	cachedFrameNo = -1;
+
+	cached_rgb = NULL;
+	cached_depth = NULL;
+
+	// cache first
+	std::string cdepthName = depthNames.at(currentFrameNo);
+	std::string crgbName = rgbNames.at(currentFrameNo);
+
+	std::string folder(associationFileLocation);
+
+	std::string concatDepthName = folder + '/' + cdepthName;
+	std::string concatRGBName = folder + '/' + crgbName;
+
+	cached_rgb = new ITMUChar4Image(true, false); 
+	cached_depth = new ITMShortImage(true, false);
+
+	if (!ReadImageFromFile(cached_rgb, concatRGBName.c_str())) 
+		printf("error reading file '%s'\n", concatRGBName.c_str());
+
+	if (!ReadImageFromFile(cached_depth, concatDepthName.c_str())) 
+		printf("error reading file '%s'\n", concatDepthName.c_str());
+
+
+	++currentFrameNo;
+
+}
+
+
+TUMFileReader::~TUMFileReader()
+{
+	delete cached_rgb;
+	delete cached_depth;
+}
+
+bool TUMFileReader::hasMoreImages(void)
+{
+	return !(currentFrameNo == depthNames.size());
+}
+
+void TUMFileReader::getImages(ITMUChar4Image *rgb, ITMShortImage *rawDepth)
+{
+	std::string depthName = depthNames.at(currentFrameNo);
+	std::string rgbName = rgbNames.at(currentFrameNo);
+
+	std::string folder(associationFileLocation);
+
+	std::string concatDepthName = folder + '/' + depthName;
+	std::string concatRGBName = folder + '/' + rgbName;
+
+	if (!ReadImageFromFile(rgb, concatRGBName.c_str())) 
+		printf("error reading file '%s'\n", concatRGBName.c_str());
+
+	if (!ReadImageFromFile(rawDepth, concatDepthName.c_str())) 
+		printf("error reading file '%s'\n", concatDepthName.c_str());
+
+	cached_rgb = rgb;
+	cached_depth = rawDepth;
+
+	++currentFrameNo;
+}
+
+Vector2i TUMFileReader::getDepthImageSize(void)
+{
+	return cached_depth->noDims;
+}
+
+Vector2i TUMFileReader::getRGBImageSize(void)
+{
+	return cached_rgb->noDims;
+}
+
