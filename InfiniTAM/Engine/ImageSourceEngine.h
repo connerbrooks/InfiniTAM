@@ -68,6 +68,7 @@ namespace InfiniTAM
 			Vector2i getRGBImageSize(void) { return imgSize; }
 		};
 
+
 		class RawFileReader : public ImageSourceEngine
 		{
 		private:
@@ -96,6 +97,12 @@ namespace InfiniTAM
 			Vector2i getRGBImageSize(void) { return imgSize; }
 		};
 
+
+		/*
+			Reads TUM RGB-D datasets available here: https://vision.in.tum.de/data/datasets/rgbd-dataset
+			Association file created with Associate.py, available here: https://vision.in.tum.de/data/datasets/rgbd-dataset/tools
+			For a more extensive walkthrough of association file creation: https://github.com/tum-vision/fastfusion/blob/master/README.md 
+		*/
 		class TUMFileReader : public ImageSourceEngine
 		{
 		private:

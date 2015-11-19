@@ -241,11 +241,6 @@ TUMFileReader::TUMFileReader(const char *calibFilename, const char *associationF
 			getline(associationFile, temp);
 			std::stringstream stream(temp);
 			stream >> junkstamp; // throwaway timestamps
-
-			stream >> rgbName;
-
-			stream >> junkstamp;
-
 			stream >> tx; 
 			stream >> ty; 
 			stream >> tz; 
@@ -253,8 +248,10 @@ TUMFileReader::TUMFileReader(const char *calibFilename, const char *associationF
 			stream >> qz; stream >> qw; 
 
 			stream >> junkstamp;
-
 			stream >> depthName;
+
+			stream >> junkstamp;
+			stream >> rgbName;
 
 			// todo store poses
 
@@ -284,11 +281,10 @@ TUMFileReader::TUMFileReader(const char *calibFilename, const char *associationF
 	cached_depth = new ITMShortImage(true, false);
 
 	if (!ReadImageFromFile(cached_rgb, concatRGBName.c_str())) 
-		printf("error reading file '%s'\n", concatRGBName.c_str());
+		printf("Error reading file '%s'\n", concatRGBName.c_str());
 
 	if (!ReadImageFromFile(cached_depth, concatDepthName.c_str())) 
-		printf("error reading file '%s'\n", concatDepthName.c_str());
-
+		printf("Error reading file '%s'\n", concatDepthName.c_str());
 
 	++currentFrameNo;
 
