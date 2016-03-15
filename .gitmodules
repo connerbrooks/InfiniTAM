@@ -1,0 +1,3 @@
+[submodule "InfiniTAM/relocforests"]
+	path = InfiniTAM/relocforests
+	url = git@github.com:ISUE/relocforests.git
