@@ -1,5 +1,6 @@
 include_directories(${OPENGL_INCLUDE_DIR})
 include_directories(${GLUT_INCLUDE_DIR})
+include_directories("$ENV{EIGEN_DIR}")
 
 IF(WITH_CUDA)
   include_directories(${CUDA_INCLUDE_DIRS})

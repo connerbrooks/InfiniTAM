@@ -81,6 +81,11 @@
 #include "Engine/ITMCompositeTracker.h"
 #include "Engine/ITMTrackingController.h"
 
+#include "Engine/ITMRelocalizer.h"
+#include "Engine/ITMRelocalizationController.h"
+
+#include "Engine/ITMForestRelocalizer.h"
+
 #include "Engine/ITMViewBuilder.h"
 #include "Engine/DeviceSpecific/CPU/ITMViewBuilder_CPU.h"
 #ifndef COMPILE_WITHOUT_CUDA

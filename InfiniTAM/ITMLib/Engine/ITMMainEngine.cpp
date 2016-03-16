@@ -62,6 +62,8 @@ ITMMainEngine::ITMMainEngine(const ITMLibSettings *settings, const ITMRGBDCalib 
 	trackingState = trackingController->BuildTrackingState(trackedImageSize);
 	tracker->UpdateInitialPose(trackingState);
 
+    relocalizer = new ITMForestRelocalizer(calib, trackedImageSize, "forest.rf");
+
 	view = NULL; // will be allocated by the view builder
 
 	fusionActive = true;
@@ -117,6 +119,9 @@ void ITMMainEngine::ProcessFrame(ITMUChar4Image *rgbImage, ITMShortImage *rawDep
 
 	// tracking
 	trackingController->Track(trackingState, view);
+
+    // todo put in controller
+    relocalizer->CollectFrame(trackingState, view);
 
 	// fusion
 	if (fusionActive) denseMapper->ProcessFrame(view, trackingState, scene, renderState_live);

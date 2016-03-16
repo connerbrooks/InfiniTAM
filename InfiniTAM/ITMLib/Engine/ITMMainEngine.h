@@ -65,6 +65,8 @@ namespace ITMLib
 			ITMTracker *tracker;
 			ITMIMUCalibrator *imuCalibrator;
 
+            ITMRelocalizer *relocalizer;
+
 			ITMView *view;
 			ITMTrackingState *trackingState;
 
@@ -117,6 +119,10 @@ namespace ITMLib
 			/// switch for turning main processing on/off
 			void turnOnMainProcessing();
 			void turnOffMainProcessing();
+
+            /// relocalization
+            void trainRelocalizer(const std::string file_name) { relocalizer->Train(); relocalizer->SaveToFile(file_name); relocalizer->Test(100); }
+            void tryframe(int frame) { relocalizer->Test(frame); };
 
 			/** \brief Constructor
 			    Ommitting a separate image size for the depth images

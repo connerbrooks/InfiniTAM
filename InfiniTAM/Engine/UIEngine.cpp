@@ -213,6 +213,17 @@ void UIEngine::glutKeyUpFunction(unsigned char key, int x, int y)
 		uiEngine->SaveSceneToMesh("mesh.stl");
 		printf(" done\n");
 		break;
+    case 'z':
+      // todo
+      // save cache
+      // save mesh
+      uiEngine->mainEngine->trainRelocalizer("forest.rf");
+      break;
+    case 'x':
+      int frame;
+      cin >> frame;
+      uiEngine->mainEngine->tryframe(frame);
+      break;
 	default:
 		break;
 	}

@@ -53,9 +53,12 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 ENDIF()
 
 add_subdirectory(ORUtils)
+add_subdirectory(relocforests)
 add_subdirectory(ITMLib)
 add_subdirectory(Utils)
 add_subdirectory(Engine)
+
+include_directories("$ENV{EIGEN_DIR}")
 
 IF(WITH_CUDA)
   include_directories(${CUDA_INCLUDE_DIRS})
@@ -63,10 +66,13 @@ ELSE()
   add_definitions(-DCOMPILE_WITHOUT_CUDA)
 ENDIF()
 
+
 add_executable(InfiniTAM_cli InfiniTAM_cli.cpp)
+target_link_libraries(InfiniTAM_cli relocforests)
 target_link_libraries(InfiniTAM_cli Engine)
 target_link_libraries(InfiniTAM_cli Utils)
 add_executable(InfiniTAM InfiniTAM.cpp)
+target_link_libraries(InfiniTAM relocforests)
 target_link_libraries(InfiniTAM Engine)
 target_link_libraries(InfiniTAM Utils)
 

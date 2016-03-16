@@ -19,6 +19,8 @@ Engine/ITMRenTracker.cpp
 Engine/ITMTrackerFactory.cpp
 Engine/ITMTrackingController.cpp
 Engine/ITMVisualisationEngine.cpp
+Engine/ITMRelocalizationController.cpp
+Engine/ITMForestRelocalizer.cpp
 )
 
 SET(ITMLIB_ENGINE_HEADERS
@@ -40,6 +42,9 @@ Engine/ITMTrackingController.h
 Engine/ITMViewBuilder.h
 Engine/ITMVisualisationEngine.h
 Engine/ITMMeshingEngine.h
+Engine/ITMRelocalizer.h
+Engine/ITMRelocalizationController.h
+Engine/ITMForestRelocalizer.h
 )
 
 ##
@@ -199,6 +204,10 @@ SOURCE_GROUP(Utils FILES ${ITMLIB_UTILS_SOURCES} ${ITMLIB_UTILS_HEADERS})
 # Specify the include directories, target and link libraries #
 ##############################################################
 
+
+find_package(OpenCV REQUIRED)
+include_directories("$ENV{EIGEN_DIR}") # set EIGEN_DIR env variable
+
 if(WITH_CUDA)
   if(NOT DEFINED CUDA_COMPUTE_CAPABILITY)
     include(${PROJECT_SOURCE_DIR}/cmake/CUDACheckCompute.cmake)
@@ -221,3 +230,4 @@ else()
 endif()
 
 target_link_libraries(ITMLib Utils)
+target_link_libraries(ITMLib ${OpenCV_LIBS})
