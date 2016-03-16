@@ -45,8 +45,8 @@ RealSenseEngine::RealSenseEngine(const char *calibFilename, Vector2i requested_i
 
     data->dev = data->ctx.get_device(0);
 
-    data->dev->enable_stream(rs::stream::depth, imageSize_d.x, imageSize_d.y, rs::format::z16, 60);
-    data->dev->enable_stream(rs::stream::color, imageSize_rgb.x, imageSize_rgb.y, rs::format::rgb8, 60);
+    data->dev->enable_stream(rs::stream::depth, imageSize_d.x, imageSize_d.y, rs::format::z16, 30);
+    data->dev->enable_stream(rs::stream::color, imageSize_rgb.x, imageSize_rgb.y, rs::format::rgb8, 30);
 
     rs::intrinsics intrinsics_depth = data->dev->get_stream_intrinsics(rs::stream::depth);
     rs::intrinsics intrinsics_rgb = data->dev->get_stream_intrinsics(rs::stream::color);

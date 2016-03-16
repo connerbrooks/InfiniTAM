@@ -123,6 +123,7 @@ namespace ITMLib
             /// relocalization
             void trainRelocalizer(const std::string file_name) { relocalizer->Train(); relocalizer->SaveToFile(file_name); relocalizer->Test(100); }
             void tryframe(int frame) { relocalizer->Test(frame); };
+            void writeDataSet(const std::string path) { relocalizer->SaveDataSet(path); }
 
 			/** \brief Constructor
 			    Ommitting a separate image size for the depth images

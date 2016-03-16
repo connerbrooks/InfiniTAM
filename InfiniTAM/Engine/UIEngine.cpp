@@ -148,7 +148,7 @@ void UIEngine::glutIdleFunction()
 void UIEngine::glutKeyUpFunction(unsigned char key, int x, int y)
 {
 	UIEngine *uiEngine = UIEngine::Instance();
-
+    std::string path;
 	switch (key)
 	{
 	case 'n':
@@ -223,6 +223,10 @@ void UIEngine::glutKeyUpFunction(unsigned char key, int x, int y)
       int frame;
       cin >> frame;
       uiEngine->mainEngine->tryframe(frame);
+      break;
+    case 'm':
+      cin >> path;
+      uiEngine->mainEngine->writeDataSet(path);
       break;
 	default:
 		break;

@@ -62,7 +62,7 @@ ITMMainEngine::ITMMainEngine(const ITMLibSettings *settings, const ITMRGBDCalib 
 	trackingState = trackingController->BuildTrackingState(trackedImageSize);
 	tracker->UpdateInitialPose(trackingState);
 
-    relocalizer = new ITMForestRelocalizer(calib, trackedImageSize, "forest.rf");
+    relocalizer = new ITMForestRelocalizer(calib, trackedImageSize);
 
 	view = NULL; // will be allocated by the view builder
 

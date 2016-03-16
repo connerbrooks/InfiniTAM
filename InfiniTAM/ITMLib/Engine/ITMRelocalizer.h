@@ -36,6 +36,7 @@ namespace ITMLib
       /** Save relocalizer data to file.
       */
       virtual void SaveToFile(const std::string name) = 0;
+      virtual void SaveDataSet(const std::string path) = 0;
 
       virtual ~ITMRelocalizer(void) {}
     };

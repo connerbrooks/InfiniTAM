@@ -17,6 +17,10 @@
 #define COMPILE_WITHOUT_Kinect2
 #endif
 
+#ifndef COMPILE_WITHOUT_OpenNI
+#define COMPILE_WITHOUT_OpenNI
+#endif
+
 #ifndef COMPILE_WITHOUT_CUDA
 #include <cuda_runtime.h>
 

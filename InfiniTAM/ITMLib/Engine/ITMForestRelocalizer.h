@@ -30,6 +30,7 @@ namespace ITMLib
       void Train();
       void Test(int frame);
       void SaveToFile(const string name);
+      void SaveDataSet(const std::string path);
     };
   }
 }

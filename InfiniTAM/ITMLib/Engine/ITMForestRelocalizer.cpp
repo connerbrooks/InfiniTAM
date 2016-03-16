@@ -65,7 +65,7 @@ void ITMForestRelocalizer::CollectFrame(ITMTrackingState *trackingState, const I
   Eigen::Vector3d translation;
   translation << t.x, t.y, t.z;
 
-  data->AddFrame(rgb_frame_sa, depth_frame_sa, EigenPose(rot, translation));
+  data->AddFrame(rgb_frame_sa, depth_frame_sa, Pose(rot, translation));
 }
 
 void ITMForestRelocalizer::Train()
@@ -78,7 +78,7 @@ void ITMForestRelocalizer::Test(int frame)
     Eigen::Affine3d pose = forest->Test(data->GetRGBImage(frame), data->GetDepthImage(frame));
 
     // compare pose to known value 
-    auto known_pose = data->poses_eigen_.at(frame);
+    auto known_pose = data->GetPose(frame);
 
     cout << "found pose:" << endl;
     cout << pose.rotation() << endl << endl;
@@ -86,12 +86,17 @@ void ITMForestRelocalizer::Test(int frame)
     cout << pose.translation() << endl;
 
     cout << "known pose:" << endl;
-    cout << known_pose.first << endl;
-    cout << known_pose.first.eulerAngles(0, 1, 2) * 180 / M_PI << endl;
-    cout << known_pose.second << endl;
+    cout << known_pose.rotation << endl;
+    cout << known_pose.rotation.eulerAngles(0, 1, 2) * 180 / M_PI << endl;
+    cout << known_pose.position << endl;
 }
 
 void ITMForestRelocalizer::SaveToFile(const string name)
 {
   forest->Serialize(name);
+}
+
+void ITMForestRelocalizer::SaveDataSet(const std::string path)
+{
+  data->Serialize(path);
 }
